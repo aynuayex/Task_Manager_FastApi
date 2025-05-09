@@ -8,7 +8,7 @@ app = FastAPI()
 # ----------------- Schemas for the Task Manager ------------------
 
 class TaskModel(BaseModel):
-    id: int = Field(gt=0 , default=0)
+    id: int = Field(gt=0 , default=1)
     title: str
     is_complete: bool = False 
 
@@ -20,10 +20,10 @@ class UpdateTask(BaseModel):
 task_list: List[TaskModel] = []
 
 # add tasks for test
-task_list.append(TaskModel(id=0, title="Task 1", is_complete=True))
-task_list.append(TaskModel(id=1, title="Task 2", is_complete=False))
-task_list.append(TaskModel(id=2, title="Task 3", is_complete=False))
-task_list.append(TaskModel(id=3, title="Task 4", is_complete=False))
+task_list.append(TaskModel(id=1, title="Task 1", is_complete=True))
+task_list.append(TaskModel(id=2, title="Task 2", is_complete=False))
+task_list.append(TaskModel(id=3, title="Task 3", is_complete=False))
+task_list.append(TaskModel(id=4, title="Task 4", is_complete=False))
 
 # =================================
 
