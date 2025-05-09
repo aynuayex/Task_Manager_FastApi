@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Path
 
-from typing import List, Union
+from typing import List
 from pydantic import BaseModel, Field
 
 app = FastAPI()
@@ -8,9 +8,9 @@ app = FastAPI()
 # ----------------- Schemas for the Task Manager ------------------
 
 class TaskModel(BaseModel):
-    id: int
+    id: int = Field(gt=0 , default=0)
     title: str
-    is_complete: bool  
+    is_complete: bool = False 
 
 class UpdateTask(BaseModel):
     title: str
@@ -37,25 +37,25 @@ async def create_task(new_task: TaskModel):
     return { "detail": "Task Created!"}
 
 @app.get("/tasks/{task_id}")
-async def get_task(task_id: int):
+async def get_task(task_id: int = Path(gt=0)):
     for task in task_list:
         if task.id == task_id:
             return task
-    return { "detail": "Task not Found!"}
+    return HTTPException(status_code=404, detail="Task not Found!")
 
 @app.put("/tasks/{task_id}")
-async def update_task(task_id: int, updated_task: UpdateTask):
+async def update_task( updated_task: UpdateTask, task_id: int = Path(gt=0)):
     for task in task_list:
         if task.id == task_id:
             task.title = updated_task.title
             task.is_complete = updated_task.is_complete
             return task
-    return { "detail": "Task not Found!"}
+    return HTTPException(status_code=404, detail="Task not Found!")
 
 @app.delete("/tasks/{task_id}")
-async def delete_task(task_id: int):
+async def delete_task(task_id: int = Path(gt=0)):
     for task in task_list:
         if task.id == task_id:
             task_list.remove(task)
             return { "detail": f"Task for id={task_id} removed!"}
-    return { "detail": "Task not Found!"}
+    return HTTPException(status_code=404, detail="Task not Found!")
