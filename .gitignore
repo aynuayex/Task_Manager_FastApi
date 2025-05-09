@@ -1,0 +1,10 @@
+.env
+pycache/
+*.pyc
+.venv/
+*.sqlite3
+.log
+.DS_Store
+.env.
+*.bak
+*.swp
